@@ -1,0 +1,15 @@
+# PDF处理
+PyPDF2>=3.0.0
+
+# OpenAI SDK（用于调用LLM API）
+openai>=1.0.0
+
+# 数据处理
+numpy>=1.24.0
+pandas>=2.0.0
+
+# 配置管理
+PyYAML>=6.0
+
+# 工具库
+tqdm>=4.65.0

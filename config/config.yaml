@@ -1,0 +1,100 @@
+project:
+  name: "飞行器气动设计知识图谱"
+
+llm:
+  provider: "openai" 
+  model: "qwen3-max-preview"
+  base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  
+  api_key: ""
+
+  prompt_template: |
+    You are an expert in the field of Flight Vehicle Aerodynamic Design and a Knowledge Graph construction assistant.
+    Your task is to extract core "Course Knowledge Points" from the provided textbook text and represent them as standard Knowledge Graph Triplets.
+
+    **Constraints:**
+    1.  **Content Focus:** Ignore historical background anecdotes, general descriptions, or irrelevant details unless they directly relate to a specific theory or design origin. Focus ONLY on core knowledge points related to aerodynamics, aircraft design, flight physics, and engineering principles.
+    2.  **Strict Schema Adherence:** You must classify every Subject, Object, and Relation strictly according to the "Allowed Categories" lists defined below (in Chinese). Do not invent new types.
+    3.  **Language Rule:** The **KEYS** of the JSON object (e.g., `subject`, `subject_type`, `relation_type`) must remain in **English**. However, ALL **VALUES** (the extracted entities, the chosen types from the lists, and the evidence) must be in **Simplified Chinese**.
+
+    **Definition of Knowledge Point:** A specific concept, principle, parameter, component, or physical relationship that is essential for understanding Flight Vehicle Aerodynamic Design.
+
+    ---
+    **Allowed Categories (Schema):**
+
+    **1. Allowed Entity Types (for subject_type and object_type):**
+    You must choose the most specific type from this Chinese list:
+    - 飞行器
+    - 飞行器部件
+    - 操纵/增升面
+    - 动力装置
+    - 机载系统
+    - 材料
+    - 武器
+    - 气动参数
+    - 几何参数
+    - 流体/流动类型
+    - 物理现象
+    - 翼型
+    - 理论/定律
+    - 设计阶段
+    - 试验设施/方法
+    - 飞行性能指标
+    - 学科领域
+    - 人物
+    - 机构/组织
+    - 历史时期/事件
+
+    **2. Allowed Relation Types (for relation_type):**
+    You must choose the relationship that best describes the link from this Chinese list:
+    - 包含部件
+    - 装备动力
+    - 装备系统
+    - 采用材料
+    - 具有几何特征
+    - 采用布局
+    - 具有气动特性
+    - 具有性能指标
+    - 属于类型
+    - 产生/生成
+    - 用于/控制
+    - 影响
+    - 消除/抑制
+    - 发生于
+    - 研制/制造
+    - 基于理论
+    - 提出/发现
+    - 验证于
+
+    ---
+
+    **Output Format (Strict JSON):**
+    You must output a JSON object containing a list of triplets.
+
+    {{
+      "triplets": [
+        {{
+          "subject": "提取的实体名称 (e.g., 机翼, 马赫数, 升力)",
+          "subject_type": "MUST be one of the 'Allowed Entity Types' listed above (中文).",
+          "relation_type": "MUST be one of the 'Allowed Relation Types' listed above (中文).",
+          "object": "目标实体名称或数值 (e.g., 升力, 0.8, 激波)",
+          "object_type": "MUST be one of the 'Allowed Entity Types' listed above (中文).",
+          "evidence": "原文中支持该三元组的简短引用 (中文)."
+        }}
+      ]
+    }}
+
+    Please analyze the text strictly based on the provided context. Do not hallucinate information. Ensure all triplets represent valid knowledge for a course.
+
+    **Text to Analyze:**
+    {text}
+
+text_splitter:
+  method: "semantic" 
+  chunk_size: 4096
+  chunk_overlap: 200
+
+paths:
+  input_dir: "data/input"
+  processed_dir: "data/processed"
+  output_dir: "data/output"

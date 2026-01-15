@@ -286,7 +286,7 @@ def main():
     validator.print_report()
     
     # 保存报告
-    validator.save_report("validation_report.json")
+    validator.save_report("data/output/validation_report.json")
 
 
 if __name__ == "__main__":

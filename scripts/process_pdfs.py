@@ -6,7 +6,6 @@ Batch Process PDF Files Script
 import sys
 from pathlib import Path
 
-# 将项目根目录添加到 sys.path，以便能够导入 src 模块
 current_file = Path(__file__).resolve()
 project_root = current_file.parent.parent
 if str(project_root) not in sys.path:
